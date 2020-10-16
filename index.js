@@ -31,30 +31,30 @@ client.connect(err => {
     const file = req.files.file;
     const title = req.body.title;
     const description = req.body.description;
-    const filePath = `${__dirname}/projectImage/${file.name}`
-    file.mv(filePath, err => {
-      if (err) {
-        console.log(err);
-        res.status(500).send({ msg: 'Failed to upload image' });
-      }
-      const newImg = fs.readFileSync(filePath);
+    // const filePath = `${__dirname}/projectImage/${file.name}`
+    // file.mv(filePath, err => {
+      // if (err) {
+      //   console.log(err);
+      //   res.status(500).send({ msg: 'Failed to upload image' });
+      // }
+      const newImg = file.data;
       const encImg = newImg.toString('base64');
       const image = {
-        contentType: req.files.file.mimetype,
-        size: req.files.file.size,
-        img: Buffer(encImg, 'base64')
+        contentType:file.mimetype,
+        size: file.size,
+        img: Buffer.from(encImg, 'base64')
       };
       serviceCollection.insertOne({ title, description, image })
         .then(result => {
-          fs.remove(filePath, error => {
-            if (error) {
-              console.log(error)
-              res.status(500).send({ msg: 'Failed to upload image' });
-            }
+          // fs.remove(filePath, error => {
+            // if (error) {
+            //   console.log(error)
+            //   res.status(500).send({ msg: 'Failed to upload image' });
+            // }
             res.send(result.insertedCount > 0);
-          })
+          // })
         })
-    })
+    // })
   })
 });
 
@@ -91,30 +91,30 @@ client.connect(err => {
     const title = req.body.serviceName;
     const status = req.body.status;
     const projectDetails = req.body.projectDetails;
-    const filePath = `${__dirname}/projectImage/${file.name}`
-    file.mv(filePath, err => {
-      if (err) {
-        console.log(err);
-        res.status(500).send({ msg: 'Failed to upload image' });
-      }
-      const newImg = fs.readFileSync(filePath);
+    // const filePath = `${__dirname}/projectImage/${file.name}`
+    // file.mv(filePath, err => {
+    //   if (err) {
+    //     console.log(err);
+    //     res.status(500).send({ msg: 'Failed to upload image' });
+    //   }
+      const newImg = file.data;
       const encImg = newImg.toString('base64');
       const image = {
-        contentType: req.files.file.mimetype,
-        size: req.files.file.size,
-        img: Buffer(encImg, 'base64')
+        contentType: file.mimetype,
+        size: file.size,
+        img: Buffer.from(encImg, 'base64')
       };
       orderCollection.insertOne({ name, email, title, status, projectDetails, image })
         .then(result => {
-          fs.remove(filePath, error => {
-            if (error) {
-              console.log(error)
-              res.status(500).send({ msg: 'Failed to upload image' });
-            }
+          // fs.remove(filePath, error => {
+          //   if (error) {
+          //     console.log(error)
+          //     res.status(500).send({ msg: 'Failed to upload image' });
+          //   }
             res.send(result.insertedCount > 0);
-          })
+          // })
         })
-    })
+    // })
   })
 
   app.get('/orders', (req, res) => {
